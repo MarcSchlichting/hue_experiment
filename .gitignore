@@ -1,3 +1,8 @@
+# ignore the results files in the results folder
+#results/colors_exp.npy
+#results/hues_exp.npy
+#results/choices_exp.pkl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
