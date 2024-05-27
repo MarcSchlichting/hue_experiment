@@ -20,17 +20,22 @@ y2 = 2/(1+np.exp(x-3))  + 0.05 * np.random.randn(n_points)
 colors = []
 hue_values = []
 choices = []
-hues = np.arange(0,360,30)+15
+# hues = np.arange(0,360,30)+15
+hue_boundaries = np.arange(0,361,30)
+hue_boundary_pairs = [(hue_boundaries[i],hue_boundaries[i+1]) for i in range(len(hue_boundaries)-1)]
 # combinations_c1_c2 = list(itertools.combinations(hues,2))
-combinations_c1_c2 = itertools.combinations(hues,2)
-combinations_all = list(itertools.product(hues,combinations_c1_c2))
+combinations_c1_c2 = itertools.combinations(hue_boundary_pairs,2)
+combinations_all = list(itertools.product(hue_boundary_pairs,combinations_c1_c2))
 combinations_all = [(c[0],c[1][0],c[1][1]) for c in combinations_all if ((c[0]!=c[1][0]) and (c[0]!=c[1][1]))]
 sat = 0.7
 light = 0.5
-for i, (anch_hue,col1_hue,col2_hue) in enumerate(combinations_all):
+for i, (anch_hue_range,col1_hue_range,col2_hue_range) in enumerate(combinations_all):
+    anch_hue = np.random.uniform(*anch_hue_range)
+    c1_hue = np.random.uniform(*col1_hue_range)
+    c2_hue = np.random.uniform(*col2_hue_range)
     anchor = convert_color(HSLColor(anch_hue,sat,light),sRGBColor).get_value_tuple()
-    c1 = convert_color(HSLColor(col1_hue,sat,light),sRGBColor).get_value_tuple()
-    c2 = convert_color(HSLColor(col2_hue,sat,light),sRGBColor).get_value_tuple()
+    c1 = convert_color(HSLColor(c1_hue,sat,light),sRGBColor).get_value_tuple()
+    c2 = convert_color(HSLColor(c2_hue,sat,light),sRGBColor).get_value_tuple()
 
     fig,axs = plt.subplots(1,2,figsize = (8,3))
     axs[0].plot(x,y1,c=anchor)
@@ -67,7 +72,7 @@ for i, (anch_hue,col1_hue,col2_hue) in enumerate(combinations_all):
 
 
     colors.append((anchor,c1,c2))
-    hue_values.append((anch_hue,col1_hue,col2_hue))
+    hue_values.append((anch_hue,c1_hue,c2_hue))
     choices.append(decision)
     # print(len(colors))
 
